@@ -18,7 +18,7 @@ const NIM_API_KEY = process.env.NIM_API_KEY;
 const SHOW_REASONING = false; // Set to true to show reasoning with <think> tags
 
 // ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
-const ENABLE_THINKING_MODE = false; // Change to true for models with thinking toggle
+const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
@@ -97,9 +97,12 @@ app.post('/v1/chat/completions', async (req, res) => {
       messages: messages,
       temperature: temperature || 0.6,
       max_tokens: max_tokens || 9024,
-      extra_body: ENABLE_THINKING_MODE ? { chat_template_kwargs: { thinking: true } } : undefined,
       stream: stream || false
     };
+
+if (ENABLE_THINKING_MODE) {
+  nimRequest.chat_template_kwargs = { thinking: true };
+}
     
     // Make request to NVIDIA NIM API
     const response = await axios.post(`${NIM_API_BASE}/chat/completions`, nimRequest, {
