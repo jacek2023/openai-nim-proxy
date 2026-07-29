@@ -105,7 +105,7 @@ app.post('/v1/chat/completions', async (req, res) => {
     // has to sit at the top level of the JSON payload, not nested inside
     // a fake "extra_body" key, or NIM 400s the whole request.
     if (ENABLE_THINKING_MODE) {
-      nimRequest.chat_template_kwargs = { thinking: true };
+      nimRequest.chat_template_kwargs: { thinking: true, reasoning_effort: "high" }
     }
 
     // Make request to NVIDIA NIM API
