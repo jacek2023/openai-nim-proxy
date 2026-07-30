@@ -102,6 +102,7 @@ app.post('/v1/chat/completions', async (req, res) => {
 
 if (ENABLE_THINKING_MODE) {
   nimRequest.chat_template_kwargs = { thinking: true };
+  nimRequest.reasoning_effort = "high"; // top-level, not nested
 }
     
     // Make request to NVIDIA NIM API
