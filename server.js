@@ -23,7 +23,7 @@ const ENABLE_THINKING_MODE = true; // Change to true for models with thinking to
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
   'gpt-3.5-turbo': 'z-ai/glm-5.2',
-  'gpt-4': 'moonshotai/kimi-k2.6',
+  'gpt-4': 'thinkingmachines/inkling',
   'gpt-4-turbo': 'moonshotai/kimi-k2-instruct-0905',
   'gpt-4o': 'deepseek-ai/deepseek-v3.1',
   'claude-3-opus': 'openai/gpt-oss-120b',
