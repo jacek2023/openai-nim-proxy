@@ -20,7 +20,7 @@ const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 // ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
 const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
-const REASONING_EFFORT = "high"
+const REASONING_EFFORT = "max"
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
@@ -103,7 +103,7 @@ app.post('/v1/chat/completions', async (req, res) => {
     };
 
 if (ENABLE_THINKING_MODE) {
-  nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "high" };
+  nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "max" };
 }
     
     // Make request to NVIDIA NIM API
