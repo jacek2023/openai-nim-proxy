@@ -28,7 +28,7 @@ const MODEL_MAPPING = {
   'gpt-4': 'thinkingmachines/inkling',
   'gpt-4-turbo': 'minimaxai/minimax-m3',
   'gpt-4o': 'deepseek-ai/deepseek-v4-flash',
-  'claude-3-opus': 'openai/gpt-oss-120b',
+  'claude-3-opus': 'nvidia/nemotron-3-ultra-550b-a55b',
   'claude-3-sonnet': 'openai/gpt-oss-20b',
   'gemini-pro': 'nvidia/llama-3.3-nemotron-super-49b-v1.5' 
 };
