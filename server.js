@@ -14,13 +14,22 @@ app.use(express.json());
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
 
-// ðŸ”¥ REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
+// 🔥 REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
 const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 
-// ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
+// 🔥 THINKING MODE TOGGLE - Enables thinking for specific models that support it
 const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
-const REASONING_EFFORT = "max"
+// Per-model thinking config — each NIM model family reads a different shape
+// of chat_template_kwargs, so a single global reasoning_effort was forcing
+// every model (including Inkling) to "max" regardless of use case.
+const THINKING_CONFIG = {
+  'z-ai/glm-5.2': { enable_thinking: true },
+  'thinkingmachines/inkling': { reasoning_effort: 'low' }, // none|minimal|low|medium|high|xhigh|max
+  'minimaxai/minimax-m3': { thinking_mode: 'adaptive' },   // disabled|adaptive|enabled
+  'deepseek-ai/deepseek-v4-flash-0731': { thinking: true, reasoning_effort: 'medium' },
+  'moonshotai/kimi-k2.6': { thinking: true, reasoning_effort: 'medium' }
+};
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
@@ -102,9 +111,9 @@ app.post('/v1/chat/completions', async (req, res) => {
       stream: stream || false
     };
 
-if (ENABLE_THINKING_MODE) {
-  nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "max" };
-}
+    if (ENABLE_THINKING_MODE && THINKING_CONFIG[nimModel]) {
+      nimRequest.chat_template_kwargs = THINKING_CONFIG[nimModel];
+    }
     
     // Make request to NVIDIA NIM API
     const response = await axios.post(`${NIM_API_BASE}/chat/completions`, nimRequest, {
