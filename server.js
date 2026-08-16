@@ -25,7 +25,7 @@ const ENABLE_THINKING_MODE = true; // Change to true for models with thinking to
 // every model (including Inkling) to "max" regardless of use case.
 const THINKING_CONFIG = {
   'z-ai/glm-5.2': { enable_thinking: true },
-  'thinkingmachines/inkling': { reasoning_effort: 'low' }, // none|minimal|low|medium|high|xhigh|max
+  'thinkingmachines/inkling': { reasoning_effort: 'none' }, // none|minimal|low|medium|high|xhigh|max
   'minimaxai/minimax-m3': { thinking_mode: 'adaptive' },   // disabled|adaptive|enabled
   'deepseek-ai/deepseek-v4-flash-0731': { thinking: true, reasoning_effort: 'medium' },
   'moonshotai/kimi-k2.6': { thinking: true, reasoning_effort: 'medium' }
