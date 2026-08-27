@@ -14,13 +14,13 @@ app.use(express.json());
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
 
-// ðŸ”¥ REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
+// 🔥 REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
 const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 
-// ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
+// 🔥 THINKING MODE TOGGLE - Enables thinking for specific models that support it
 const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
-const REASONING_EFFORT = "max"
+const REASONING_EFFORT = "max";
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
@@ -30,14 +30,14 @@ const MODEL_MAPPING = {
   'gpt-4o': 'deepseek-ai/deepseek-v4-flash-0731',
   'claude-3-opus': 'deepseek-ai/deepseek-v4-pro-0813',
   'claude-3-sonnet': 'moonshotai/kimi-k2.6',
-  'gemini-pro': 'nvidia/llama-3.3-nemotron-super-49b-v1.5' 
+  'gemini-pro': 'nvidia/llama-3.3-nemotron-super-49b-v1.5'
 };
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    service: 'OpenAI to NVIDIA NIM Proxy', 
+  res.json({
+    status: 'ok',
+    service: 'OpenAI to NVIDIA NIM Proxy',
     reasoning_display: SHOW_REASONING,
     thinking_mode: ENABLE_THINKING_MODE
   });
@@ -67,12 +67,12 @@ app.post('/v1/chat/completions', async (req, res) => {
     let nimModel = MODEL_MAPPING[model];
     if (!nimModel) {
       try {
-        await axios.post(`${NIM_API_BASE}/chat/completions, {
+        await axios.post(`${NIM_API_BASE}/chat/completions`, {
           model: model,
           messages: [{ role: 'user', content: 'test' }],
           max_tokens: 1
         }, {
-          headers: { 'Authorization': Bearer ${NIM_API_KEY}, 'Content-Type': 'application/json' },
+          headers: { 'Authorization': `Bearer ${NIM_API_KEY}`, 'Content-Type': 'application/json' },
           validateStatus: (status) => status < 500
         }).then(res => {
           if (res.status >= 200 && res.status < 300) {
@@ -102,14 +102,14 @@ app.post('/v1/chat/completions', async (req, res) => {
       stream: stream || false
     };
 
-if (ENABLE_THINKING_MODE) {
-  nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "max" };
-}
+    if (ENABLE_THINKING_MODE) {
+      nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "max" };
+    }
 
     // Make request to NVIDIA NIM API
-    const response = await axios.post(${NIM_API_BASE}/chat/completions, nimRequest, {
+    const response = await axios.post(`${NIM_API_BASE}/chat/completions`, nimRequest, {
       headers: {
-        'Authorization': Bearer ${NIM_API_KEY},
+        'Authorization': `Bearer ${NIM_API_KEY}`,
         'Content-Type': 'application/json'
       },
       responseType: stream ? 'stream' : 'json'
@@ -130,14 +130,7 @@ if (ENABLE_THINKING_MODE) {
         buffer = lines.pop() || '';
 
         lines.forEach(line => {
-          if (line.startsWith('data: ')) {
-            if (line.includes('[DONE]')) {
-              res.write(line + '\n');
-              return;
-            }
-
-            try {
-              const data = JSON.parse(line.slice(6));
+          if (line.startsWithparse(line.slice(6));
               if (data.choices?.[0]?.delta) {
                 const reasoning = data.choices[0].delta.reasoning_content;
                 const content = data.choices[0].delta.content;
@@ -172,7 +165,7 @@ if (ENABLE_THINKING_MODE) {
                   delete data.choices[0].delta.reasoning_content;
                 }
               }
-              res.write(data: ${JSON.stringify(data)}\n\n);
+              res.write(`data: ${JSON.stringify(data)}\n\n`);
             } catch (e) {
               res.write(line + '\n');
             }
@@ -188,7 +181,7 @@ if (ENABLE_THINKING_MODE) {
     } else {
       // Transform NIM response to OpenAI format with reasoning
       const openaiResponse = {
-        id: chatcmpl-${Date.now()},
+        id: `chatcmpl-${Date.now()}`,
         object: 'chat.completion',
         created: Math.floor(Date.now() / 1000),
         model: model,
@@ -235,7 +228,7 @@ if (ENABLE_THINKING_MODE) {
 app.all('*', (req, res) => {
   res.status(404).json({
     error: {
-      message: Endpoint ${req.path} not found,
+      message: `Endpoint ${req.path} not found`,
       type: 'invalid_request_error',
       code: 404
     }
@@ -243,8 +236,9 @@ app.all('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(OpenAI to NVIDIA NIM Proxy running on port ${PORT});
-  console.log(Health check: http://localhost:${PORT}/health);
-  console.log(Reasoning display: ${SHOW_REASONING ? 'ENABLED' : 'DISABLED'});
-  console.log(Thinking mode: ${ENABLE_THINKING_MODE ? 'ENABLED' : 'DISABLED'});
+  console.log(`OpenAI to NVIDIA NIM Proxy running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`Reasoning display: ${SHOW_REASONING ? 'ENABLED' : 'DISABLED'}`);
+  console.log(`Thinking mode: ${ENABLE_THINKING_MODE ? 'ENABLED' : 'DISABLED'}`);
 });
+        
