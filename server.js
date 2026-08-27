@@ -18,7 +18,7 @@ const NIM_API_KEY = process.env.NIM_API_KEY;
 const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 
 // ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
-const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
+const ENABLE_THINKING_MODE = false; // Change to true for models with thinking toggle
 
 const REASONING_EFFORT = "max";
 
