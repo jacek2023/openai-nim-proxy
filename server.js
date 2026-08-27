@@ -20,7 +20,7 @@ const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 // ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
 const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
-const REASONING_EFFORT = "minimal";
+const REASONING_EFFORT = "max";
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
