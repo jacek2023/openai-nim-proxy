@@ -67,7 +67,7 @@ app.post('/v1/chat/completions', async (req, res) => {
     let nimModel = MODEL_MAPPING[model];
     if (!nimModel) {
       try {
-        await axios.post(${NIM_API_BASE}/chat/completions, {
+        await axios.post(`${NIM_API_BASE}/chat/completions, {
           model: model,
           messages: [{ role: 'user', content: 'test' }],
           max_tokens: 1
