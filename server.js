@@ -14,10 +14,10 @@ app.use(express.json());
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
 
-// 🔥 REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
+// ðŸ”¥ REASONING DISPLAY TOGGLE - Shows/hides reasoning in output
 const SHOW_REASONING = true; // Set to true to show reasoning with <think> tags
 
-// 🔥 THINKING MODE TOGGLE - Enables thinking for specific models that support it
+// ðŸ”¥ THINKING MODE TOGGLE - Enables thinking for specific models that support it
 const ENABLE_THINKING_MODE = true; // Change to true for models with thinking toggle
 
 const REASONING_EFFORT = "max";
@@ -74,8 +74,8 @@ app.post('/v1/chat/completions', async (req, res) => {
         }, {
           headers: { 'Authorization': `Bearer ${NIM_API_KEY}`, 'Content-Type': 'application/json' },
           validateStatus: (status) => status < 500
-        }).then(res => {
-          if (res.status >= 200 && res.status < 300) {
+        }).then(response => {
+          if (response.status >= 200 && response.status < 300) {
             nimModel = model;
           }
         });
@@ -103,7 +103,7 @@ app.post('/v1/chat/completions', async (req, res) => {
     };
 
     if (ENABLE_THINKING_MODE) {
-      nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: "max" };
+      nimRequest.chat_template_kwargs = { thinking: true, reasoning_effort: REASONING_EFFORT };
     }
 
     // Make request to NVIDIA NIM API
@@ -130,7 +130,14 @@ app.post('/v1/chat/completions', async (req, res) => {
         buffer = lines.pop() || '';
 
         lines.forEach(line => {
-          if (line.startsWithparse(line.slice(6));
+          if (line.startsWith('data: ')) {
+            if (line.includes('[DONE]')) {
+              res.write(line + '\n');
+              return;
+            }
+
+            try {
+              const data = JSON.parse(line.slice(6));
               if (data.choices?.[0]?.delta) {
                 const reasoning = data.choices[0].delta.reasoning_content;
                 const content = data.choices[0].delta.content;
@@ -241,4 +248,3 @@ app.listen(PORT, () => {
   console.log(`Reasoning display: ${SHOW_REASONING ? 'ENABLED' : 'DISABLED'}`);
   console.log(`Thinking mode: ${ENABLE_THINKING_MODE ? 'ENABLED' : 'DISABLED'}`);
 });
-        
