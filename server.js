@@ -24,7 +24,7 @@ const REASONING_EFFORT = "max";
 
 // Model mapping (adjust based on available NIM models)
 const MODEL_MAPPING = {
-  'gpt-3.5-turbo': 'z-ai/glm-5.3-flash',
+  'gpt-3.5-turbo': 'z-ai/glm-5-3-flash',
   'gpt-4': 'nvidia/nemotron-3-ultra-550b-a55b',
   'gpt-4-turbo': 'minimaxai/minimax-m3',
   'gpt-4o': 'deepseek-ai/deepseek-v4.1-flash',
